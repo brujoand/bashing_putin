@@ -1,0 +1,775 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Life of Bash</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Life of Bash</h1>
+					<h3>Hvordan overleve (og leke) i shellet</h3>
+					<p>Gå til 3a578cb.ngrok.com for å se presentasjonen<p>
+					<p>
+						<small>Av</br> Anders Brujordet </br> <a href="http://twitter.com/brujoand">@brujoand</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Agenda</h2>
+					<ul>
+						<li class="fragment">Lett og ledig intro</li>
+						<li class="fragment">Verktøy</li>
+						<li class="fragment">Kontrollstrukturer</li>
+						<li class="fragment">Alias og funksjoner</li>
+						<li class="fragment">Prosesser</li>	
+						<li class="fragment">Pitfalls</li>
+						<li class="fragment">ShinySauce</li>
+						<li class="fragment">Basing putin - Puzzler</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Disclaimer</h2>
+					<p>
+						Hensikten er ikke å bli Richard Stallman, men å (forhåpentligvis) se nyttige ting man kan google opp ved behov, og å slippe å stå fast på typiske feil senere.
+					</p>
+				</section>
+
+				<!-- Example of nested vertical slides -->
+				<section>
+					<section>
+						<h2>Lett og ledig intro</h2>
+						<img data-src="images/pingpong.gif">					
+					</section>
+					<section>
+						<img data-src="images/bashrc.png">
+					</section>
+					<section>
+						<h2>Bash config 101</h2>
+						<ul>					
+							<li class="fragment">.bash_profile - Lastes når du logger inn (via ssh)</li>
+							<li class="fragment">.bash_logout - Lastes når du logger ut (via ssh)</li>
+							<li class="fragment">.bashrc - Lastes når du start et nytt interaktivt nonlogin shell</li>	
+							<li class="fragment"><pre><code data-trim> [[ -r ~/.bashrc ]] && . ~/.bashrc</code></pre></li>
+						</ul>
+					</section>
+					<section>
+						<h2>Bash er et programmeringspråk</h2>
+						<ul>
+							<li class="fragment">"Bash is an sh-compatible command language" (man bash)</li>
+							<li class="fragment">"A command language is a domain-specific interpreted language" (Wikipedia)</li>
+							<li class="fragment">"An interpreted language is a programming language" (Wikipedia)</li>
+							<li class="fragment">Ergo sum: Bash er et programmeringspråk OG et shell. Tenk interpreter</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Bash er en filutforsker</h2>
+						<ul>
+							<li class="fragment">cd, ls, find</li>
+							<li class="fragment">cp, mv, touch</li>
+							<li class="fragment">cat, tail, grep</li>
+						</ul>
+					</section>
+					<section>
+						<h2> Men mest av alt, er det en stor eske med verktøy..</h2>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Hvilke verktøy har vi?</h2>
+						<img data-src="images/hammer.jpg">
+					</section>
+					<section>					
+						<h2>Verktøy</h2>
+						<ul>
+							<li class="fragment">Vi har masse små, spesialiserte programmer</li>
+							<li class="fragment">Vi bruker bla pipe "|" for å sende strømmer av data mellom de</li>
+							<li class="fragment">Vi kan redirecte disse strømmen til f.eks filer vha ">" </li>					
+						</ul>
+					</section>
+
+					<section>
+						<h2>Verktøy</h2>
+						<img data-src="images/pipes.jpeg">
+					</section>
+
+					<section>
+						<h2>Verktøy</h2>
+						<p>Eksempel: Vi har en fil med ansatte, og vil vite hvilke 2 avdelinger som er størst</p>
+					</section>				
+					
+					<section>
+						<h2>Verktøy</h2>
+						<img data-src="images/cat.png">
+					</section>
+					
+					<section>
+						<h2>Verktøy</h2>
+						<img data-src="images/cut.png">
+					</section>
+					
+					<section>
+						<h2>Verktøy</h2>
+						<img data-src="images/sort.png">
+					</section>
+					
+					<section>
+						<h2>Verktøy</h2>
+						<img data-src="images/uniq.png">
+					</section>
+
+					<section>
+						<h2>Verktøy</h2>
+						<img data-src="images/sort_by_number.png">
+					</section>
+
+					<section>
+						<h2>Verktøy</h2>
+						<img data-src="images/head.png">
+					</section>
+
+					<section>
+						<h2>Verktøy</h2>
+						<p>Hva om vi vil hente ut alle finnkodene fra et søk på mfinn? (ikke gjør dette hjemme)</p>
+					</section>
+
+					<section>
+						<h2>Verktøy</h2>
+						<img data-src="images/curl.png">
+					</section>
+
+					<section>
+						<h2>Verktøy</h2>
+						<img data-src="images/curl2.png">
+					</section>
+
+					<section>
+						<h2>Verktøy</h2>
+						<img data-src="images/sed.png">
+					</section>
+
+					<section>
+						<h2>Verktøy</h2>
+						<p>Hva om vi vil finne de 5 filene med flest linjer kode i et prosjekt?</p>
+					</section>
+
+					<section>
+						<h2>Verktøy</h2>
+						<img data-src="images/find.png">
+					</section>
+
+					<section>
+						<h2>Verktøy</h2>
+						<img data-src="images/xargs.png">
+					</section>
+
+					<section>
+						<h2>Verktøy</h2>
+						<img data-src="images/wrong_sort.png">
+					</section>
+
+					<section>
+						<h2>Verktøy</h2>
+						<img data-src="images/correct_sort.png">
+					</section>
+
+					<section>
+						<h2>Verktøy</h2>
+						<img data-src="images/to_file.png">
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Hva med kontrollstrukturer?</h2>
+						<img data-src="images/controll_structures.jpg">
+					</section>
+
+					<section>
+						<h2>Først trenger vi variabler</h2>
+						<pre><code data-trim>
+#! /bin/bash						
+
+tall=10
+echo $tall
+
+> 10
+						</code></pre>
+					</section>
+
+					<section>
+						<h2>Vi må kunne utføre sjekker</h2>
+						<pre><code data-trim>
+#! /bin/bash
+
+tall=10
+if [[ $tall -gt 1 ]]; then
+  echo "$tall er best"
+elif [[ $tall -eq 1 ]]; then
+  echo "Det er ganske rart.."
+else
+  echo "Hrm, wat?"
+fi
+
+> 10 er best
+						</code></pre>
+					</section>
+
+					<section>
+						<h2>Løkker er fint</h2>
+						<pre><code data-trim>
+#! /bin/bash
+
+while true; do
+    echo "Jeg varer evig :D"
+done
+
+> Jeg varer evig :D
+> Jeg varer evig :D
+> Jeg varer evig :D
+> Jeg varer evig :D
+> Jeg varer evig :D
+
+
+						</code></pre>
+						<p>
+					</section>
+
+					<section>
+						<h2>Vi ønsker også å iterere over datastrukturer</h2>
+						<pre><code data-trim>
+#! /bin/bash
+
+for n in {1..5}; do
+    echo "Jeg er nummer $n"
+done
+
+> Jeg er nummer 1
+> Jeg er nummer 2
+> Jeg er nummer 3
+> Jeg er nummer 4
+> Jeg er nummer 5
+
+
+						</code></pre>
+						<p>
+					</section>
+					<section>
+						<h2>Case switching er fint</h2>
+						<pre><code data-trim>
+#! /bin/bash
+
+tall=2						
+case $tall in
+    0) echo "Jeg er tallet 0";;
+    1) echo "Jeg er tallet 1";;
+    2) echo "Jeg er tallet 2";;
+esac
+
+> Jeg er tallet 2
+
+
+						</code></pre>
+						<p>
+					</section>					
+				</section>
+				<section>
+					<section>
+						<h2>Alias og Funksjoner</h2>
+						<img data-src="images/matrix.gif" height="400" width="400">
+						<p> Så hvordan strukturere alt dette? </p>						
+					</section>
+					<section>
+						<h2>Alias</h2>
+						<pre><code data-trim>
+#! /bin/bash
+alias mci='mvn clean install'
+						</code></pre>
+					</section>
+					<section>
+						<h2>Alias</h2>
+						<pre><code data-trim>
+#! /bin/bash						
+alias grepc='grep --color=always'
+						</code></pre>
+					</section>
+					<section>
+						<h2>Alias</h2>
+						<pre><code data-trim>
+#! /bin/bash						
+alias gitwho='git log | sed -n "s/Author: \(.*\) <.*/\1/p" | sort | uniq -c \
+| sort -nr | head -n 5'
+						</code></pre>
+					</section>
+					<section>
+						<h2>Alias</h2>
+						<pre><code data-trim>
+#! /bin/bash
+alias rebase='if [[ -z "$(git status --porcelain)" ]]; then \
+git pull --rebase; else git stash; git pull --rebase; \
+git stash apply; fi'
+						</code></pre>
+					</section>
+					<section>						
+						<img data-src="images/not_sure_alias.png">
+					</section>
+					<section>
+					<h2>Hva med en funksjon?</h2>
+						<pre><code data-trim>
+#! /bin/bash
+function rebase() {
+  if [[ -z "$(git status --porcelain)" ]]; then
+    git pull --rebase
+  else
+    echo "working tree dirty - stashing"
+    git stash
+    echo "pull and rebase"
+    git pull --rebase
+    echo "applying stash"
+    git stash apply
+  fi
+}			
+						</code></pre>
+					</section>
+
+					<section>
+						<h2>Vi kan også ta imot parametre</h2>
+						<ul>
+							<li class="fragment">$1, $2, $3 mapper til parameter 1,2,3</li>
+							<li class="fragment">$# forteller oss hvor mange parametre vi har fått</li>
+							<li class="fragment">$@ gir oss alle parametrene i en struktur</li>
+						</ul>
+					</section>
+
+					<section>
+					<h2>Vi kan også ta imot parametre</h2>
+						<pre><code data-trim>
+#! /bin/bash
+function setjdk() {
+  if [[ $# -ne 1 ]]; then
+    export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+    export PATH=$JAVA_HOME/bin:$PATH
+  else
+    export JAVA_HOME=$(/usr/libexec/java_home -v $1)
+    export PATH=$JAVA_HOME/bin:$PATH
+  fi
+}		
+						</code></pre>
+					</section>			
+
+				</section>
+
+				<section>
+					<section>
+						<h2>Prosesser</h2>
+						<img data-src="images/processes.png" height="500" width="500">
+					</section>
+
+					<section>
+						<h2>Go to sleep</h2>
+						<img data-src="images/sleep.png">
+					</section>
+
+					<section>
+						<h2>CTRL-Z</h2>
+						<img data-src="images/stop.png">
+					</section>
+
+					<section>
+						<h2>Bring to forground</h2>
+						<img data-src="images/fg.png">
+					</section>
+
+					<section>
+						<h2>Send to background</h2>
+						<img data-src="images/bg.png">
+					</section>
+
+					<section>
+						<h2>Is it still there?</h2>
+						<img data-src="images/bg_check.png">
+					</section>
+
+					<section>
+						<h2>You're no son of mine!</h2>
+						<img data-src="images/disown.png">
+					</section>
+
+					<section>
+						<h2>Where did he go?</h2>
+						<img data-src="images/disown_check.png">
+					</section>
+
+					<section>
+						<h2>Now you must die!</h2>
+						<img data-src="images/kill.png">
+					</section>
+
+					<section>
+						<h2>Is it dead?</h2>
+						<img data-src="images/kill_check.png">
+					</section>
+
+					<section>
+						<h2>Wait for us</h2>
+						<img data-src="images/wait.png">
+					</section>
+					
+					<section>
+						<h2>CTRL-C</h2>
+						<img data-src="images/die.png">
+					</section>
+
+				</section>
+
+				<section>
+					<section>
+						<h2>Pitfalls</h2>
+						<img data-src="images/dafuq.png">
+					</section>
+
+					<section>
+						<h2>Quote everything - Alltid!</h2>
+						<img data-src="images/always_quote.png">
+					</section>
+
+					<section>
+						<h2>Single quotes</h2>
+						<img data-src="images/single_quotes.png">
+					</section>
+
+					<section>
+						<h2>Double quotes</h2>
+						<img data-src="images/double_quotes.png">
+					</section>
+
+					<section>
+						<h2>Aldri bruk 'ls' til scripting</h2>
+						<img data-src="images/ls.png">
+					</section>
+
+					<section>
+						<h2>Bruk file expansion i steden</h2>
+						<img data-src="images/file_expansion.png">
+					</section>			
+
+					<section>
+						<h2>[[ ]] er mye kulere en [ ]</h2>
+						<img data-src="images/brackets_bad.png">
+					</section>
+
+					<section>
+						<h2>[[ ]] er mye kulere en [ ]</h2>
+						<img data-src="images/brackets_good.png">
+					</section>
+					<section>
+						<h2>Variabler</h2>
+						<pre><code data-trim>
+#! /bin/bash						
+$foo=bar # Nope
+foo = bar # Fremdeles nope
+foo=$bar # Flott!
+foo="Lang tekst med mange ord" # Supert!
+						</code></pre>
+					</section>
+
+					<section>
+						<h2>Alias</h2>
+						<pre><code data-trim>
+#! /bin/bash						
+cp -r ~/BadAssMovies /secret/; rm -r ~/BadAssMovies # Ikke trygg
+cp -r ~/BadAssMovies /secret/ & rm -r ~/BadAssMovies # Ikke trygg
+cp -r ~/BadAssMovies /secret/ && rm -r ~/BadAssMovies # Trygg
+cp -r ~/BadAssMovies /secret/ || echo "oops" # Or er også mulig :)
+						</code></pre>
+					</section>
+
+				</section>
+
+				<section>
+					<section>
+						<h2>ShinySauce</h2>
+						<img data-src="images/megusta.png" height="500" width="500">
+					</section>
+
+					<section>
+						<h2>Tastetilordninger</h2>
+						<ul>
+							<li class="fragment">CTRL-A | CTRL-E - Gå til start/slutten av linja</li>
+							<li class="fragment">CTRL-L - Vask skjermen</li>
+							<li class="fragment">CTRL-C | CTRL-Z - Drep / Stopp aktiv jobb</li>
+							<li class="fragment">CTRL-P | CTRL-N - Forrige / Neste kommando fra history</li>
+							<li class="fragment">CTRL-R - Søk i sist brukte kommandoer</li>
+							<li class="fragment">CTRL-X CTRL-E - Ta teksten på linja, og sleng den i $EDITOR</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>SRC - Hvor kildekoden bor</h2>
+						<img data-src="images/src.png">
+					</section>
+					<section>
+						<h2>SRC - Hvor kildekoden bor</h2>
+						<pre><code data-trim>
+#! /bin/bash			
+function src() {
+    cd ${SRC_DIR}/${1}
+}
+						</code></pre>
+					</section>
+					<section>
+						<h2>SRC - Hvor kildekoden bor</h2>
+						<pre><code data-trim>
+#! /bin/bash			
+function _src_cd() {
+    local cur temp_compreply dir
+    COMPREPLY=()
+    cur=`_get_cword`
+    dir=$SRC_DIR/
+
+    if [[ $dir != ${cur:0:${#dir}} ]]; then
+        cur=${dir}${cur}
+    fi
+
+    temp_compreply=$(compgen -d ${cur})
+    COMPREPLY=( ${temp_compreply[*]//$dir/} )
+}
+complete -o nospace -S "/" -F _src_cd src # Her skjer magien
+						</code></pre>
+					</section>
+
+					<section>
+						<h2>Backto - Få meg bort herfra!</h2>
+						<img data-src="images/backto.png">
+					</section>
+
+					<section>
+						<h2>Åh, neeeei! En typo :( </h2>
+						<img data-src="images/untar.png">
+					</section>
+
+					<section>
+						<h2>De 3 magiske hattene! </h2>
+						<img data-src="images/unrar.png">
+					</section>
+
+					<section>
+						<h2>Ah, jeg glemte sudo </h2>
+						<img data-src="images/no_sudo.png">
+					</section>
+
+					<section>
+						<h2>Kjør kommandoen på nytt </h2>
+						<img data-src="images/yes_sudo.png">
+					</section>
+
+					<section>
+						<h2>Promptet mitt</h2>
+						<img data-src="images/prompt.png">
+					</section>
+
+					<section>
+						<h2>Eksempel på prompt</h2>
+						<pre><code data-trim>
+#! /bin/bash			
+
+# Colors
+GREY='\[\033[01;30m\]'
+RESET='\[\033[00m\]'
+BLUE='\[\033[01;34m\]'
+WHITE='\[\033[01;39m\]'
+
+git_status=$(__git_ps1 "[%s]")
+date_now=$(date +%H:%M:%S)
+
+# Prompt
+PS1="$GREY[\$date_now]$WHITE\u@\h:$BLUE\w$GREY\$git_status>$RESET "
+						</code></pre>
+					</section>
+
+					<section>
+						<h2>Distributed SH</h2>
+						<pre><code data-trim>
+#! /bin/bash		
+dsh -w -r ssh -m a1 -m a2 -m a3 -m a4 -M -- \ 
+  'uptime ; iad finn api-iad status ; iad finn api-iad lbstatus ; echo -'						
+						</code></pre>
+					</section>
+
+					<section>
+						<h2>Distributed SH</h2>
+						<img data-src="images/apeak.png">
+					</section>
+				</section>
+
+				<section>
+					<h2>Spørsmål?</h2>
+					<ul>
+						<li class="fragment"> Sjekk #bash@freenode</li>
+						<li class="fragment"> <a href="www.shellcheck.net">www.shellcheck.net</a> er helt konge</li>
+						<li class="fragment"> <a href="http://mywiki.wooledge.org/BashGuide">mywiki.wooledge.org/BashGuide</a> er en veldig grundig sak</li>
+						<li class="fragment"> <a href="https://github.com/brujoand/dotfiles">https://github.com/brujoand/dotfiles</a></li>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>Bashing Putins Election</h2>
+						<p>Putin stiller til valg, og vi har hørt et rykte om at det finnes et veldig skitten bilde av putin og en geit.
+						Vi håper å kunne ruinere valget for ham ved å finne dette bilde og publisere det på Twitter.</p>
+
+						<p>Vi har fått tilgang på et sikkerhetsstemplet gitarkiv som ligger her --> <a href="dump.tar.gz">http://marsv.in/cgi-bin/vote?12345</a></p>
+
+						<p>Ca 60 min, det kommer hint fortløpende.</p>
+					</section>
+
+					<section>
+						<h2>Hint 10 min</h2>
+						<ul>
+							<li>tar xvvf dump.tar.gz</li>
+							<li>cd git/</li>
+							<li>git log</li>
+							<li>git co 54aa4b</li>
+							<li>cd classified/</li>
+							<li>cat password.txt</li>
+							<li>cat Dostoevsky_Notes_from_the_Underground.txt</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Hint 20 min</h2>
+							<pre><code data-trim>
+	#! /bin/bash
+tr -c '[:alnum:]' '[\n*]' < Dostoevsky_*Underground.txt | sort | uniq -c | sort -nr \
+| sed -n 's/.* 1 \(.*\)$/\1/p' > possiblePasswords.txt
+							</code></pre>
+					</section>
+
+					<section>
+						<h2>Hint 30 min</h2>
+							<pre><code data-trim>
+#! /bin/bash
+for word in $(cat possiblePasswords.txt); do 
+
+  echo $word | gpg --passphrase-fd 0 -q --batch --allow-multiple-messages --no-tty \
+   --output backup.tar -d backup.tar.gpg;
+
+  if [ $? -eq 0 ]; then
+
+    echo "GPG passphrase is: ${word}";
+    exit 0;
+
+  fi
+
+done;
+
+exit 1; # tar xvvf backup.tar 
+							</code></pre>
+					</section>
+
+					<section>
+						<h2>Hint 40 min</h2>
+						<ul>
+							<li>tar xvvf backup.tar</li>
+							<li>cd secret//</li>
+							<li>for file in *.gz; do file $file; done</li>
+							<li>cp DOC0170.gz image.jpeg</li>
+							<li>open image.jpeg</li>
+							<li>gzip -d DOC0267.gz</li>
+							<li>cat DOC0267</li>
+							<li>белый = hvit, чёрный = black</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Hint 50 min</h2>
+						<ul>
+							<li>cat DOC0267 | sed 's/чёрный/0/g' | sed 's/белый/1/g' | tr '\n' ' ' > answer.txt</li>
+							<li>Åpne filen i en teksteditor, zoooooom ut, og resize vinduet.</li>	
+							<li>Post på twitter med #bashingputin, om du tørr :P </li>
+							<li>Ikke gjør det. hehe</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Success! Putin flykter :D </h2>
+						<img data-src="images/putinbear.jpeg">
+					</section>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			    multiplex: {		        
+			        secret: '14331646184154772848', 
+			        id: '365be44edc6d7e29', 
+			        url: '127.0.0.1:1948' 
+			    },
+
+				// Optional reveal.js plugins
+				dependencies: [										
+        			{ src: '//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js', async: true },
+					{ src: 'plugin/multiplex/master.js', async: true },
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
